@@ -17,7 +17,7 @@ void shadowsocks_conn(const char* serveraddress,int serverport,const char* passw
     #define SS_SERVER_ADDRESS serveraddress
     #define SS_SERVER_PORT serverport
     #define SS_PASSWORD password
-    print_inf_message("setting the shadowsocks server...");
+    print_inf_message("\nsetting the shadowsocks server...");
     fflush(stdout);
         int listen_fd;
         struct sockaddr_in listen_addr;
