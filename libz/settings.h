@@ -36,7 +36,7 @@ const char* RESET = "\x1b[0m";
 //defining log messages
 const char* ERROR_SIGN = "\x1b[31m[ERROR]%s\x1b[0m\n%s";
 const char* DEBUG_SIGN = "\x1b[34m[DEBUG]\x1b[0m%s";
-const char* WARNING_SIGN = "\x1b[33m[WARNING]\x1b[0m%s";
+const char* WARNING_SIGN = "\x1b\n[33m[WARNING]\x1b[0m%s\n";
 const char* CRITICAL_SIGN = "[CRITICAL]";
 const char* INFO_SIGN = "\n\x1b[32m[INFO]%s\x1b[0m%s\n";
 
