@@ -1,6 +1,7 @@
 #include <stdio.h>
 #ifndef CONNECTION_H
 #define CONNECTION_H
+// g++ -o con raylinker.cc
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -12,46 +13,36 @@
 #include "typesdef.h"
 #include "settings.h"
 #endif
-//!shadow socks server
-#ifndef SS_SERVER_ADDRESS
-
-#define SS_SERVER_ADDRESS 0
-
-#endif
-
-#ifndef SS_SERVER_PORT
-#define SS_SERVER_PORT 1
-#endif
-#ifndef SS_PASSWORD
-#define SS_PASSWORD 1
-#endif
-
-int shadowsocksconn(const char* serveraddress,int serverport,const char* password){
-    printf("fef");
-    #if SS_SERVER_ADDRESS == 0 && SS_SERVER_PORT == 1 && SS_PASSWORD == 1
+void shadowsocks_conn(const char* serveraddress,int serverport,const char* password){
     #define SS_SERVER_ADDRESS serveraddress
     #define SS_SERVER_PORT serverport
     #define SS_PASSWORD password
     print_inf_message("setting the shadowsocks server...");
+    fflush(stdout);
         int listen_fd;
         struct sockaddr_in listen_addr;
         if ((listen_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("Socket creation failed");
         print_error_msg("connection creation failed with server");
+        fflush(stdout);
         exit(EXIT_FAILURE);
     }
     listen_addr.sin_family = AF_INET;
     listen_addr.sin_port = htons(1080); 
     listen_addr.sin_addr.s_addr = INADDR_ANY;
     print_inf_message("starting to listen on the server and port...");
+    fflush(stdout);
     if (bind(listen_fd, (struct sockaddr *)&listen_addr, sizeof(listen_addr)) == -1) {
     perror("Bind failed");
     print_error_msg("binding failed with server");
+    fflush(stdout);
+    
     exit(EXIT_FAILURE);
     }
     if (listen(listen_fd, 10) == -1) {
     perror("Listen failed");
     print_error_msg("listen failed on the port");
+    fflush(stdout);
     exit(EXIT_FAILURE);
     }
         while (1) {
@@ -59,15 +50,18 @@ int shadowsocksconn(const char* serveraddress,int serverport,const char* passwor
         struct sockaddr_in client_addr;
         socklen_t client_len = sizeof(client_addr);
         print_inf_message("starting to accept the client...");
+        fflush(stdout);
 
         // Accept incoming connection
         if ((client_fd = accept(listen_fd, (struct sockaddr *)&client_addr, &client_len)) == -1) {
             perror("Accept failed");
+            fflush(stdout);
             continue;
         }
 
         printf("Accepted connection from client %s:%d\n", 
                inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+               fflush(stdout);
 
         // Create a new Shadowsocks connection structure
         struct ss_conn *conn = (struct ss_conn *)malloc(sizeof(struct ss_conn));
@@ -76,6 +70,7 @@ int shadowsocksconn(const char* serveraddress,int serverport,const char* passwor
         // Connect to the Shadowsocks server
         if ((conn->server_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
             perror("Server socket creation failed");
+            fflush(stdout);
             close(client_fd);
             free(conn);
             continue;
@@ -87,6 +82,7 @@ int shadowsocksconn(const char* serveraddress,int serverport,const char* passwor
 
         if (inet_pton(AF_INET, SS_SERVER_ADDRESS, &server_addr.sin_addr) <= 0) {
             perror("Invalid address/Address not supported");
+            fflush(stdout);
             close(client_fd);
             close(conn->server_fd);
             free(conn);
@@ -95,6 +91,7 @@ int shadowsocksconn(const char* serveraddress,int serverport,const char* passwor
 
         if (connect(conn->server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1) {
             perror("Connection to server failed");
+            fflush(stdout);
             close(client_fd);
             close(conn->server_fd);
             free(conn);
@@ -102,6 +99,7 @@ int shadowsocksconn(const char* serveraddress,int serverport,const char* passwor
         }
 
         printf("Connected to Shadowsocks server %s:%d\n", SS_SERVER_ADDRESS, SS_SERVER_PORT);
+        fflush(stdout);
 
         if (fork() == 0) {
             close(listen_fd);
@@ -111,9 +109,9 @@ int shadowsocksconn(const char* serveraddress,int serverport,const char* passwor
             handle_server(conn); // Handle server in the same process
         }
     }
+    fflush(stdout);
 
     close(listen_fd);
-    #endif
 
 }
 
