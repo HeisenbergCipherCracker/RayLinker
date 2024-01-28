@@ -27,10 +27,12 @@
 #endif
 
 int shadowsocksconn(const char* serveraddress,int serverport,const char* password){
+    printf("fef");
     #if SS_SERVER_ADDRESS == 0 && SS_SERVER_PORT == 1 && SS_PASSWORD == 1
     #define SS_SERVER_ADDRESS serveraddress
     #define SS_SERVER_PORT serverport
     #define SS_PASSWORD password
+    print_inf_message("setting the shadowsocks server...");
         int listen_fd;
         struct sockaddr_in listen_addr;
         if ((listen_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
@@ -41,6 +43,7 @@ int shadowsocksconn(const char* serveraddress,int serverport,const char* passwor
     listen_addr.sin_family = AF_INET;
     listen_addr.sin_port = htons(1080); 
     listen_addr.sin_addr.s_addr = INADDR_ANY;
+    print_inf_message("starting to listen on the server and port...");
     if (bind(listen_fd, (struct sockaddr *)&listen_addr, sizeof(listen_addr)) == -1) {
     perror("Bind failed");
     print_error_msg("binding failed with server");
@@ -55,6 +58,7 @@ int shadowsocksconn(const char* serveraddress,int serverport,const char* passwor
         int client_fd;
         struct sockaddr_in client_addr;
         socklen_t client_len = sizeof(client_addr);
+        print_inf_message("starting to accept the client...");
 
         // Accept incoming connection
         if ((client_fd = accept(listen_fd, (struct sockaddr *)&client_addr, &client_len)) == -1) {
