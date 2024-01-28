@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#ifndef SETTINGS_H
+#define SETTINGS_H
 
 #define PROGRAM "RayLinker"
 #define VERSION "1.0.0"
@@ -19,8 +21,6 @@ void legal_warning(){
 
 void print_version(){
     printf("Version: %s\n", VERSION);
-    printf("Author: %s\n", AUTHOR);
-    printf("Release: %s\n", RELEASE);
 }
 
 
@@ -128,3 +128,11 @@ const char* OPTIONS[1000] = {
 };
 
 //eof
+
+//info log messeges
+const char* TIME_OUT_ERROR = "Connection timed out";
+const char* CONNECTION_CLOSED = "Server closed connection";
+const char* CONNECTION_ERROR = "Connection error";
+
+//eof
+#endif
