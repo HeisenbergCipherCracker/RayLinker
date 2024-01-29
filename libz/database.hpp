@@ -13,7 +13,7 @@ namespace database{
         char *errMessage = 0;
         int rc;
 
-        rc = sqlite3_open("test.db", &db);
+        rc = sqlite3_open("servers.db", &db);
 
         if (rc) {
             std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
