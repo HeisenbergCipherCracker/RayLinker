@@ -14,14 +14,18 @@ typedef struct{
 
 typedef struct{
     int* ss_server_port;
-    char* ss_server_address;
-    char* ss_password;
-}serverifno;
+    const char* ss_server_address;
+    const char* ss_password;
+    const char* server_type;
+
+}serverinfo;
 
 struct ss_conn {
     int client_fd;
     int server_fd;
 };
+
+
 
 
 #endif

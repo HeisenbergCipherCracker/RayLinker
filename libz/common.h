@@ -67,8 +67,8 @@ void create_table(const char* data[], const char* column_headers[], size_t num_c
 
 
 
-List get_server_address_info(){
-    List list;
+serverinfo get_server_address_info(){
+    serverinfo list;
     const char* serveraddress;
     const char* serverport;
     const char* servertype;
@@ -81,8 +81,9 @@ List get_server_address_info(){
     printf("Enter the server type:");
     fflush(stdout);
     scanf("%s",servertype);
-    list.string = serveraddress;
-    list.numeric = serverport;
-    list.string = servertype;
+    list.server_type = servertype;
+    list.ss_server_address = serveraddress;
+    list.ss_server_port = atoi(serverport);
+    list.ss_password = NULL;
     return list;
 }
