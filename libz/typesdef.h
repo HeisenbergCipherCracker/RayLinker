@@ -13,7 +13,7 @@ typedef struct{
 
 
 typedef struct{
-    int* ss_server_port;
+    const char* ss_server_port;
     const char* ss_server_address;
     const char* ss_password;
     const char* server_type;
